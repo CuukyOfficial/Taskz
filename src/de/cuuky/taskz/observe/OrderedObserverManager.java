@@ -15,7 +15,12 @@ public class OrderedObserverManager<I> implements ObserverManager<I> {
         this.tasks = Collections.synchronizedSortedSet(new TreeSet<>());
     }
 
-    private static Class<?>[] firstParameterSmart(Object function) {
+    @SuppressWarnings("unchecked")
+    private <T extends I> Class<T> parseFirstParameter(Task<T, ?> task) {
+        return (Class<T>) ((ParameterizedType) task.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
+    }
+
+    private <T extends I> Class<?> firstParameterSmart(Task<T, ?> function) {
         String functionClassName = function.getClass().getName();
         int lambdaMarkerIndex = functionClassName.indexOf("$$Lambda$");
         String declaringClassName = functionClassName.substring(0, lambdaMarkerIndex);
@@ -26,18 +31,21 @@ public class OrderedObserverManager<I> implements ObserverManager<I> {
             throw new IllegalStateException("Unable to find lambda's parent class " + declaringClassName);
         }
 
-        return Arrays.stream(declaringClass.getDeclaredMethods())
-                .filter(Method::isSynthetic).findFirst().map(Method::getParameterTypes)
-                .orElseThrow(() -> new IllegalStateException("Unable to find lambda's synthetic method")).clone();
+        Method method = Arrays.stream(declaringClass.getDeclaredMethods())
+                .filter(Method::isSynthetic)
+                .findFirst().orElseThrow(() -> new IllegalStateException("Unable to find lambda's synthetic method"));
+
+
+        return method.getParameterTypes()[method.getParameters().length - 1];
     }
 
     @SuppressWarnings("unchecked")
     private <T extends I> Class<T> parseEventClass(Task<T, ?> task) {
         // First check if the task is a lambda expression or an anonymous class
         if (task.getClass().isSynthetic()) {
-            return (Class<T>) firstParameterSmart(task)[0];
+            return (Class<T>) firstParameterSmart(task);
         }
-        return (Class<T>) ((ParameterizedType) task.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0];
+        return this.parseFirstParameter(task);
     }
 
     private int parsePriority(Observer<?> task) {
@@ -46,7 +54,7 @@ public class OrderedObserverManager<I> implements ObserverManager<I> {
     }
 
     private <T extends I> Registration<T> toRegistration(Observer<T> task) {
-        return new Registration<>(UUID.randomUUID(), this.parseEventClass(task), task, this.parsePriority(task));
+        return new Registration<>(UUID.randomUUID(), System.nanoTime(), this.parseEventClass(task), task, this.parsePriority(task));
     }
 
     @Override
@@ -57,7 +65,7 @@ public class OrderedObserverManager<I> implements ObserverManager<I> {
 
     @Override
     public boolean unobserve(UUID uuid) {
-        return this.tasks.remove(new Registration<I>(uuid, null, null, 0));
+        return this.tasks.remove(new Registration<I>(uuid, 0, null, null, 0));
     }
 
     @Override

@@ -3,7 +3,7 @@ package de.cuuky.taskz.observe;
 import java.util.Objects;
 import java.util.UUID;
 
-public record Registration<T>(UUID uuid, Class<T> clazz, Observer<T> task,
+public record Registration<T>(UUID uuid, long registrationTime, Class<T> clazz, Observer<T> task,
                               int priority) implements Comparable<Registration<?>> {
 
     public Boolean execute(Object input) {
@@ -24,6 +24,7 @@ public record Registration<T>(UUID uuid, Class<T> clazz, Observer<T> task,
 
     @Override
     public int compareTo(Registration<?> o) {
-        return this.priority == o.priority ? this.uuid.compareTo(o.uuid) : this.priority - o.priority;
+        return this.priority == o.priority ? (int) (this.registrationTime == o.registrationTime ?
+                this.uuid.compareTo(o.uuid) : this.registrationTime - o.registrationTime) : this.priority - o.priority;
     }
 }
