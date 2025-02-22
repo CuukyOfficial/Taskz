@@ -35,7 +35,6 @@ public class OrderedObserverManager<I> implements ObserverManager<I> {
                 .filter(Method::isSynthetic)
                 .findFirst().orElseThrow(() -> new IllegalStateException("Unable to find lambda's synthetic method"));
 
-
         return method.getParameterTypes()[method.getParameters().length - 1];
     }
 

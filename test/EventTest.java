@@ -5,7 +5,6 @@ class EventTest {
     public static void main(String[] args) {
         ObserverManager<Event> registry = new OrderedObserverManager<>();
 
-
         for (int i = 0; i < 100; i++) {
             int finalI = i;
             registry.observe((a) -> {
