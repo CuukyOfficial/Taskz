@@ -1,11 +1,14 @@
 import de.cuuky.taskz.ScheduledExecutor;
 import de.cuuky.taskz.observe.ObserverManager;
+import de.cuuky.taskz.observe.OrderedObserverManager;
 
 public class ScheduledExecTest {
 
     public static void main(String[] args) throws InterruptedException {
-        ScheduledExecutor<String, String> t = new ScheduledExecutor<>((String s) -> s, 1000);
-        ObserverManager<String> obs = t.execute(() -> String.valueOf(System.currentTimeMillis()));
+        ObserverManager<String> obs = new OrderedObserverManager<>();
+        ScheduledExecutor<String> t = new ScheduledExecutor<>(obs, 1000);
+        t.execute(() -> "Hallo");
+
         obs.observe((s) -> {
             System.out.println(s);
             return true;

@@ -8,7 +8,7 @@ public class DelayedExecutor<I, O> implements ScheduledTask<I, Future<O>> {
     private final Task<I, O> task;
     private final long timeout;
 
-    public DelayedExecutor(long timeout, Task<I, O> task) {
+    public DelayedExecutor(Task<I, O> task, long timeout) {
         this.task = task;
         this.timeout = timeout;
     }

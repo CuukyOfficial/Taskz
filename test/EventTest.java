@@ -17,9 +17,6 @@ class EventTest {
     }
 }
 
-interface Event {
-}
-
 record EventA(String s) implements Event {
 
 }

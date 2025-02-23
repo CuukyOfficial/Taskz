@@ -10,4 +10,6 @@ public interface ObserverManager<I> extends Task<I, Boolean> {
 
     boolean unobserve(UUID uuid);
 
+    <T> Task<T, Boolean> wrap(Task<T, I> task);
+
 }

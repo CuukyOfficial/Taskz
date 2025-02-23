@@ -2,11 +2,11 @@ package de.cuuky.taskz;
 
 import java.util.stream.Stream;
 
-public class StreamExecutor<I> implements Task<I, Void> {
+public class MultiExecutor<I> implements Task<I, Void> {
 
     private final Stream<Task<I, ?>> tasks;
 
-    public StreamExecutor(Stream<Task<I, ?>> tasks) {
+    public MultiExecutor(Stream<Task<I, ?>> tasks) {
         this.tasks = tasks;
     }
 

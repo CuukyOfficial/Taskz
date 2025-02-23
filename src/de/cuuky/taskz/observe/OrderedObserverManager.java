@@ -57,6 +57,11 @@ public class OrderedObserverManager<I> implements ObserverManager<I> {
     }
 
     @Override
+    public <T> Task<T, Boolean> wrap(Task<T, I> task) {
+        return ((T input) -> this.execute(task.execute(input)));
+    }
+
+    @Override
     public <T extends I> Registration<T> observe(Observer<T> task) {
         Registration<T> registration = this.toRegistration(task);
         return !this.tasks.add(registration) ? null : registration;
