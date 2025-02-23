@@ -1,7 +1,4 @@
-package de.cuuky.taskz.state;
-
-import de.cuuky.taskz.OptionalTask;
-import de.cuuky.taskz.Task;
+package de.cuuky.taskz;
 
 import java.util.Optional;
 
@@ -23,7 +20,7 @@ public class SwitchingExecutor<I, O> implements OptionalTask<I, O> {
 
         if (!result && this.running) {
             this.running = false;
-            return Optional.of(this.task.stop(input));
+            this.task.cancel(true);
         } else if (result && !this.running) {
             this.running = true;
             return Optional.of(this.task.execute(input));
