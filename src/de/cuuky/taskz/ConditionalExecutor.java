@@ -2,18 +2,18 @@ package de.cuuky.taskz;
 
 import java.util.Optional;
 
-public class ConditionalExecutor<I, O> implements Task<I, Optional<O>> {
+public class ConditionalExecutor<I, O> implements OptionalTask<I, O> {
 
-    private final Task<I, Boolean> condition;
     private final Task<I, O> task;
+    private final Task<I, Boolean> condition;
 
-    public ConditionalExecutor(Task<I, Boolean> condition, Task<I, O> task) {
-        this.condition = condition;
+    public ConditionalExecutor(Task<I, O> task, Task<I, Boolean> condition) {
         this.task = task;
+        this.condition = condition;
     }
 
     @Override
     public Optional<O> execute(I input) {
-        return condition.execute(input) ? Optional.of(task.execute(input)) : Optional.empty();
+        return this.condition.execute(input) ? Optional.of(this.task.execute(input)) : Optional.empty();
     }
 }
