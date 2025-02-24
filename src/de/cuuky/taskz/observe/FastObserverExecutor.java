@@ -26,8 +26,6 @@ public class FastObserverExecutor<I> extends AbstractObserverExecutor<I> {
 
     @Override
     public Boolean execute(I input) {
-        Class<?> clazz = input.getClass();
-        Set<Registration<? extends I>> tasks = this.observers.getOrDefault(clazz, Collections.emptySet());
-        return this.executeTasks(tasks.stream(), input);
+        return this.executeTasks(this.observers.getOrDefault(input.getClass(), Collections.emptySet()).stream(), input);
     }
 }
