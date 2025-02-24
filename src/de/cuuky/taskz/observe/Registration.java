@@ -12,7 +12,7 @@ public record Registration<T>(UUID uuid, long registrationTime, Class<T> clazz, 
 
     @Override
     public int hashCode() {
-        return this.uuid.hashCode();
+        return Objects.hash(uuid);
     }
 
     @Override

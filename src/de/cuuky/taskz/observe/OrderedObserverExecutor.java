@@ -6,11 +6,11 @@ import java.util.TreeSet;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-public class OrderedObserverManager<I> extends AbstractObserverManager<I> {
+public class OrderedObserverExecutor<I> extends AbstractObserverExecutor<I> {
 
     private final SortedSet<Registration<? extends I>> tasks;
 
-    public OrderedObserverManager() {
+    public OrderedObserverExecutor() {
         this.tasks = Collections.synchronizedSortedSet(new TreeSet<>());
     }
 
@@ -39,6 +39,6 @@ public class OrderedObserverManager<I> extends AbstractObserverManager<I> {
         Class<?> clazz = input.getClass();
         Stream<Registration<? extends I>> tasks = this.tasks.stream()
                 .filter(task -> task.clazz().isAssignableFrom(clazz));
-        return tasks.map(task -> task.execute(input)).allMatch(b -> b == null || b);
+        return this.executeTasks(tasks, input);
     }
 }

@@ -2,15 +2,15 @@ import de.cuuky.taskz.OptionalTask;
 import de.cuuky.taskz.ScheduledExecutor;
 import de.cuuky.taskz.StatefulTask;
 import de.cuuky.taskz.SwitchingExecutor;
-import de.cuuky.taskz.observe.ObserverManager;
-import de.cuuky.taskz.observe.OrderedObserverManager;
+import de.cuuky.taskz.observe.ObserverExecutor;
+import de.cuuky.taskz.observe.OrderedObserverExecutor;
 
 public class HeartbeatTest {
 
     static State state = State.RUNNING;
 
     public static void main(String[] args) throws InterruptedException {
-        ObserverManager<Event> obs = new OrderedObserverManager<>();
+        ObserverExecutor<Event> obs = new OrderedObserverExecutor<>();
         new ScheduledExecutor<>(obs, 20).execute(() -> new StateBeatEvent(state));
 
 //        obs.observe((state) -> {
@@ -18,7 +18,7 @@ public class HeartbeatTest {
 //            return true;
 //        });
 
-        OptionalTask<StateBeatEvent, String> opt = new SwitchingExecutor<>(new StatefulTask<>() {
+        OptionalTask<StateBeatEvent, Void> opt = new SwitchingExecutor<>(new StatefulTask<>() {
             @Override
             public boolean cancel(boolean interrupt) {
                 return true;
@@ -30,13 +30,14 @@ public class HeartbeatTest {
             }
 
             @Override
-            public String execute(StateBeatEvent input) {
-                return "Start";
+            public Void execute(StateBeatEvent input) {
+                System.out.println("Hallo");
+                return null;
             }
         }, (e) -> e.state() == State.RUNNING);
 
         obs.observe((StateBeatEvent e) -> {
-            System.out.println(opt.execute(e));
+            opt.execute(e);
             return true;
         });
 

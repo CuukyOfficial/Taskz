@@ -1,11 +1,11 @@
 import de.cuuky.taskz.ScheduledExecutor;
-import de.cuuky.taskz.observe.ObserverManager;
-import de.cuuky.taskz.observe.OrderedObserverManager;
+import de.cuuky.taskz.observe.ObserverExecutor;
+import de.cuuky.taskz.observe.OrderedObserverExecutor;
 
 public class ScheduledExecTest {
 
     public static void main(String[] args) throws InterruptedException {
-        ObserverManager<String> obs = new OrderedObserverManager<>();
+        ObserverExecutor<String> obs = new OrderedObserverExecutor<>();
         ScheduledExecutor<String> t = new ScheduledExecutor<>(obs, 1000);
         t.execute(() -> "Hallo");
 

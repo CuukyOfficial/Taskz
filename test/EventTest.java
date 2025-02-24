@@ -3,7 +3,7 @@ import de.cuuky.taskz.observe.*;
 class EventTest {
 
     public static void main(String[] args) {
-        ObserverManager<Event> registry = new OrderedObserverManager<>();
+        ObserverExecutor<Event> registry = new OrderedObserverExecutor<>();
 
         for (int i = 0; i < 100; i++) {
             int finalI = i;
