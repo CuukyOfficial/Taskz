@@ -12,6 +12,6 @@ public class MultiExecutor<I, O> implements Task<I, Stream<O>> {
 
     @Override
     public Stream<O> execute(I input) {
-        return tasks.map(task -> task.execute(input));
+        return this.tasks.map(task -> task.execute(input));
     }
 }

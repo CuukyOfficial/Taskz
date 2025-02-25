@@ -4,8 +4,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 public record Registration<T>(UUID uuid, long registrationTime, Class<T> clazz, Observer<T> task,
-                              int priority) implements Comparable<Registration<?>> {
+                              int priority) implements Comparable<Registration<?>>, Observer<Object> {
 
+    @Override
     public Boolean execute(Object input) {
         return this.task.execute(this.clazz.cast(input));
     }

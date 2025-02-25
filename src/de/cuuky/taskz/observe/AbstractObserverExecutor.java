@@ -17,7 +17,7 @@ public abstract class AbstractObserverExecutor<I> implements ObserverExecutor<I>
     }
 
     protected boolean executeTasks(Stream<Registration<? extends I>> tasks, I input) {
-        return tasks.map(task -> task.execute(input)).allMatch(b -> b == null || b);
+        return tasks.map(t -> t.execute(input)).allMatch(b -> b == null || b);
     }
 
     @Override
