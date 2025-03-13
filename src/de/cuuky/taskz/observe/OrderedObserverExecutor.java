@@ -15,8 +15,8 @@ public class OrderedObserverExecutor<I> extends AbstractObserverExecutor<I> {
     }
 
     private int parsePriority(Observer<?> task) {
-        ObserverMeta priority = task.getClass().getAnnotation(ObserverMeta.class);
-        return priority == null ? ExecutionOrder.DEFAULT : priority.value();
+        ObserverMeta meta = task.getClass().getAnnotation(ObserverMeta.class);
+        return meta == null ? ExecutionOrder.DEFAULT : meta.priority();
     }
 
     private <T extends I> Registration<T> toRegistration(Observer<T> task) {

@@ -34,7 +34,7 @@ record EventA(String s) implements Event {
 //    }
 //}
 //
-//@ObserverMeta(value = ExecutionOrder.LOGIC)
+//@ObserverMeta(priority = ExecutionOrder.LOGIC)
 //class EventBObserver implements Observer<EventB> {
 //
 //    @Override
@@ -44,7 +44,7 @@ record EventA(String s) implements Event {
 //    }
 //}
 //
-//@ObserverMeta(value = ExecutionOrder.LOGIC)
+//@ObserverMeta(priority = ExecutionOrder.LOGIC)
 //class EventBObserver2 implements Observer<EventB> {
 //
 //    @Override
